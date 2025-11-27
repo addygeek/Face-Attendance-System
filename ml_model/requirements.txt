@@ -1,0 +1,10 @@
+# Core dependencies - Works on Windows, Mac, and Linux
+numpy>=1.21.0
+opencv-python>=4.5.0
+flask>=2.0.0
+flask-cors>=3.0.0
+
+# Face detection - Install with: pip install --no-cache-dir mediapipe
+# Or use Conda: conda install mediapipe
+# mediapipe>=0.8.0
+
