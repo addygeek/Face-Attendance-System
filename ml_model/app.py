@@ -230,4 +230,6 @@ def health():
     return jsonify({'status': 'ok'}), 200
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    # Bind to 0.0.0.0 to allow access from other devices on the same network
+    # Access from phone: http://<your-computer-ip>:5000
+    app.run(debug=True, host='0.0.0.0', port=5000)

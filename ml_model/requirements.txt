@@ -1,10 +1,99 @@
-# Core dependencies - Works on Windows, Mac, and Linux
-numpy>=1.21.0
-opencv-python>=4.5.0
-flask>=2.0.0
-flask-cors>=3.0.0
+# ============================================================================
+# Face Attendance System - Complete Requirements
+# Python 3.11+ Compatible
+# For easy deployment on Windows, Mac, and Linux
+# ============================================================================
 
-# Face detection - Install with: pip install --no-cache-dir mediapipe
+# ============================================================================
+# CORE DEPENDENCIES
+# ============================================================================
+
+# Numerical computing - Required for embeddings and calculations
+numpy>=1.23.0,<2.0.0
+
+# Image processing - Required for face detection and image handling
+opencv-python>=4.8.0
+
+# Web framework - Required for REST API
+flask>=2.3.0
+
+# CORS support - Required for cross-origin requests from browser
+flask-cors>=4.0.0
+
+# ============================================================================
+# FACE DETECTION & RECOGNITION
+# ============================================================================
+
+# MediaPipe - Face detection and landmark extraction
+# Note: If installation fails, use: pip install --no-cache-dir mediapipe
 # Or use Conda: conda install mediapipe
-# mediapipe>=0.8.0
+mediapipe>=0.10.0
+
+# ============================================================================
+# OPTIONAL: DATABASE & PERSISTENCE (if needed in future)
+# ============================================================================
+
+# Uncomment if migrating to SQLite database
+# flask-sqlalchemy>=3.0.0
+# sqlalchemy>=2.0.0
+
+# ============================================================================
+# OPTIONAL: TESTING & DEVELOPMENT
+# ============================================================================
+
+# Uncomment for running tests
+# pytest>=7.0.0
+# pytest-cov>=4.0.0
+
+# ============================================================================
+# OPTIONAL: DEPLOYMENT & PRODUCTION
+# ============================================================================
+
+# Uncomment for production WSGI server
+# gunicorn>=21.0.0
+
+# Uncomment for environment variable management
+# python-dotenv>=1.0.0
+
+# ============================================================================
+# OPTIONAL: MONITORING & LOGGING
+# ============================================================================
+
+# Uncomment for advanced logging
+# python-json-logger>=2.0.0
+
+# ============================================================================
+# NOTES FOR DEPLOYMENT
+# ============================================================================
+# 
+# 1. WINDOWS DEPLOYMENT:
+#    - Install Python 3.11 from python.org
+#    - Create virtual environment: python -m venv .venv
+#    - Activate: .venv\Scripts\activate
+#    - Install: pip install -r requirements.txt
+#
+# 2. MAC DEPLOYMENT:
+#    - Install Python 3.11 via Homebrew: brew install python@3.11
+#    - Create virtual environment: python3 -m venv .venv
+#    - Activate: source .venv/bin/activate
+#    - Install: pip install -r requirements.txt
+#
+# 3. LINUX DEPLOYMENT:
+#    - Install Python 3.11: sudo apt-get install python3.11
+#    - Create virtual environment: python3.11 -m venv .venv
+#    - Activate: source .venv/bin/activate
+#    - Install: pip install -r requirements.txt
+#
+# 4. DOCKER DEPLOYMENT:
+#    - Use Python 3.11 base image
+#    - Copy requirements.txt
+#    - Run: pip install -r requirements.txt
+#
+# 5. CONDA DEPLOYMENT:
+#    - Create environment: conda create -n face-attendance python=3.11
+#    - Activate: conda activate face-attendance
+#    - Install: pip install -r requirements.txt
+#    - Or: conda install numpy opencv flask flask-cors mediapipe
+#
+# ============================================================================
 

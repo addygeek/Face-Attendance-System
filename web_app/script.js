@@ -4,7 +4,8 @@ let CTX = CANVAS.getContext("2d");
 
 let embeddings = {};
 const THRESHOLD = 0.1; // Threshold for similarity
-const API_BASE = 'http://localhost:5000';
+// Automatically use the current host (works for both localhost and network IP)
+const API_BASE = `http://${window.location.hostname}:5000`;
 const ATTENDANCE_LOG_INTERVAL = 30000; // 30 seconds - prevent duplicate logging
 const DEFAULT_PERSON_NAME = "Person"; // Default name when no embeddings loaded
 
@@ -31,7 +32,7 @@ async function loadEmbeddings() {
     const res = await fetch(`${API_BASE}/api/embeddings`);
     if (res.ok) {
       const embeddingsList = await res.json();
-      
+
       for (let item of embeddingsList) {
         try {
           const embRes = await fetch(`embeddings/${item.path.split('/')[1]}`);
@@ -176,7 +177,7 @@ function drawResults(results) {
     if (shouldVerify) {
       labelData = identifyFace(landmarks);
       faceLabels.push(labelData); // Cache it (simple cache, assumes order stays same for 200ms)
-      
+
       // Log attendance if person is identified and not recently logged
       if (labelData.name !== "Unknown" && labelData.name !== "Loading...") {
         logAttendance(labelData.name, labelData.confidence);
@@ -195,7 +196,7 @@ function drawResults(results) {
     const text = labelData.name;
     const startTime = attendanceStartTime[labelData.name];
     const timeText = startTime ? `${text} (${startTime.toLocaleTimeString()})` : text;
-    
+
     CTX.font = "bold 24px Arial";
     const textWidth = CTX.measureText(timeText).width;
 
@@ -211,19 +212,19 @@ function drawResults(results) {
 async function logAttendance(personName, confidence) {
   const now = Date.now();
   const lastLog = lastAttendanceLog[personName] || 0;
-  
+
   // Prevent duplicate logging within ATTENDANCE_LOG_INTERVAL
   if (now - lastLog < ATTENDANCE_LOG_INTERVAL) {
     return;
   }
-  
+
   lastAttendanceLog[personName] = now;
-  
+
   // Track start time for this person
   if (!attendanceStartTime[personName]) {
     attendanceStartTime[personName] = new Date();
   }
-  
+
   try {
     const response = await fetch(`${API_BASE}/api/attendance`, {
       method: 'POST',
@@ -236,11 +237,11 @@ async function logAttendance(personName, confidence) {
         start_time: attendanceStartTime[personName].toISOString()
       })
     });
-    
+
     if (response.ok) {
       const data = await response.json();
       console.log(`✓ Attendance logged for ${personName} at ${new Date().toLocaleTimeString()}`);
-      
+
       // Show notification
       showAttendanceNotification(personName, data);
     } else {
@@ -267,12 +268,12 @@ function showAttendanceNotification(personName, record) {
     font-weight: bold;
     animation: slideIn 0.3s ease-out;
   `;
-  
+
   const time = new Date(record.timestamp).toLocaleTimeString();
   notification.innerHTML = `✓ ${personName} logged at ${time}`;
-  
+
   document.body.appendChild(notification);
-  
+
   // Remove after 3 seconds
   setTimeout(() => {
     notification.style.animation = 'slideOut 0.3s ease-out';
