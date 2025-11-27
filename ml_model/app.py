@@ -230,6 +230,11 @@ def health():
     return jsonify({'status': 'ok'}), 200
 
 if __name__ == '__main__':
-    # Bind to 0.0.0.0 to allow access from other devices on the same network
-    # Access from phone: http://<your-computer-ip>:5000
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    import os
+    # Get port from environment variable (for deployment platforms like Render, Railway)
+    port = int(os.environ.get('PORT', 5000))
+    # Disable debug in production for security
+    debug_mode = os.environ.get('FLASK_ENV', 'production') == 'development'
+    # Bind to 0.0.0.0 to allow access from other devices/internet
+    app.run(debug=debug_mode, host='0.0.0.0', port=port)
+
