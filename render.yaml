@@ -1,13 +1,11 @@
 services:
-  # Flask Backend API
   - type: web
-    name: face-recognition-api
+    name: face-attendance-app
     env: python
     region: oregon
     plan: free
-    buildCommand: "cd ml_model && pip install -r requirements.txt"
-    startCommand: "cd ml_model && python app.py"
+    buildCommand: pip install -r requirements.txt
+    startCommand: streamlit run streamlit_app.py
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
-    healthCheckPath: /health
