@@ -1,30 +1,37 @@
-# Streamlit Cloud Deployment - Fixed!
+# **CRITICAL: You MUST do this in Streamlit Cloud**
 
-## Problem
-Streamlit Cloud was using Python 3.13, which doesn't support MediaPipe yet.
+The app is using Python 3.13 which doesn't support MediaPipe.
 
-## Solution
-✅ Created `.python-version` file with `3.11` to force Python 3.11
-✅ Already have `runtime.txt` with `python-3.11.9`
-✅ Already have `.streamlit/packages.txt` with system dependencies
-✅ Already have `av>=10.0.0` in requirements.txt
+## Steps to Fix:
 
-## Files Added/Modified
-1. `.python-version` - Forces Python 3.11 on Streamlit Cloud
-2. `.streamlit/packages.txt` - System dependencies for OpenCV
-3. `.streamlit/config.toml` - Streamlit configuration
-4. `requirements.txt` - Added `av>=10.0.0`
+###1. Go to Streamlit Cloud Dashboard
+- Go to https://share.streamlit.io
+- Find your app "Face-Attendance-System"
 
-## What to Do Now
-1. Go to your Streamlit Cloud dashboard
-2. The app should automatically redeploy with the new commit
-3. It will now use Python 3.11 (compatible with MediaPipe)
-4. Wait for deployment to complete (~2-5 minutes)
+### 2. DELETE the App
+- Click "⋮" (three dots) next to your app
+- Click "Delete app"
+- Confirm deletion
 
-## If It Still Fails
-Check the logs in "Manage app" → Look for:
-- ✅ Should say "Python 3.11" (not 3.13)
-- ✅ Should successfully install `opencv-python-headless`
-- ✅ Should successfully install `mediapipe`
+### 3. Create New App
+- Click "New app"
+- Select your repository: `addygeek/Face-Attendance-System`
+- Set:
+  - **Branch**: `main`
+  - **Main file path**: `streamlit_app.py`
+  - **Python version**: Select **3.11** from dropdown (NOT 3.13!)
 
-The app should work now! 🚀
+### 4. Deploy
+- Click "Deploy"
+- Wait 2-5 minutes
+
+## Why This is Needed
+Streamlit Cloud is caching the old Python 3.13 environment. Deleting and recreating forces it to use Python 3.11 properly.
+
+## Alternative: Reboot App
+If you don't want to delete:
+1. Go to "Manage app" → "⋮" → "Reboot app"
+2. If that doesn't work, try "Settings" → Check Python version is set to 3.11
+3. If still failing, you MUST delete and recreate
+
+The `.python-version` file is now set to `3.11.0` which should work.
