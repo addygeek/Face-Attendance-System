@@ -12,7 +12,8 @@
 numpy>=1.23.0,<2.0.0
 
 # Image processing - Required for face detection and image handling
-opencv-python>=4.8.0
+# Use headless version for Streamlit Cloud deployment to avoid libGL errors
+opencv-python-headless>=4.8.0
 
 # Web framework - Required for REST API
 flask>=2.3.0
