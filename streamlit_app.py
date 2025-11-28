@@ -4,29 +4,56 @@ import numpy as np
 import os
 import json
 import pandas as pd
-from streamlit_webrtc import webrtc_streamer
+import sys
+
+# Try to import critical dependencies
+try:
+    from streamlit_webrtc import webrtc_streamer
+    import mediapipe as mp
+except ImportError as e:
+    st.set_page_config(page_title="Setup Error", page_icon="❌")
+    st.error("❌ **Critical Dependency Error**")
+    st.warning(f"Error: `{str(e)}`")
+    
+    st.markdown("""
+    ### 🛑 You are running with the wrong Python environment!
+    
+    The **MediaPipe** library does not support Python 3.13 yet.
+    
+    **How to fix:**
+    1. Stop this server (Ctrl+C).
+    2. Go to your folder: `D:\\PROGRAMING\\7th sem 7\\face\\face_detection_app`
+    3. Double-click **`run_app.bat`** to start the app correctly.
+    
+    ---
+    **Debug Info:**
+    * Python Version: `{}`
+    * Python Path: `{}`
+    """.format(sys.version, sys.executable))
+    st.stop()
+
+mp_mesh = mp.solutions.face_mesh
 
 # Import custom modules
-from ml_model.utils.helpers import (
-    load_embeddings, 
-    save_embedding, 
-    ATTENDANCE_FILE, 
-    EMBEDDINGS_DIR
-)
-from ml_model.utils.extract_embedding import get_embedding as extract_embedding_from_file
-from ml_model.video_processors import AttendanceVideoProcessor
+# We need to be careful with these imports as they might also import mediapipe
+try:
+    from ml_model.utils.helpers import (
+        load_embeddings, 
+        save_embedding, 
+        ATTENDANCE_FILE, 
+        EMBEDDINGS_DIR
+    )
+    # We don't import extract_embedding here to avoid double import error if it fails inside
+    # But we need it for the logic below.
+    from ml_model.video_processors import AttendanceVideoProcessor
+    # We can't import extract_embedding_from_file easily because it has a top-level import of mediapipe
+    # which might fail if we didn't catch it above. But since we caught it above, it should be safe now.
+    from ml_model.utils.extract_embedding import get_embedding as extract_embedding_from_file
 
-# We need a helper to extract embedding from in-memory image for registration
-# The existing utils/extract_embedding.py takes a file path.
-# We should probably adapt it or just use the logic inline here for registration since it's simple.
-# Or better, let's update extract_embedding.py to handle numpy arrays too.
-# For now, I will implement a simple wrapper here or duplicate the logic for registration to keep it robust.
-# Actually, I can use the logic from video_processors but that's inside a class.
-# Let's just import the logic from helpers if I put it there? No, I didn't put extraction logic in helpers.
-# I will add a simple extraction function here for registration using MediaPipe directly, similar to before.
+except ImportError as e:
+    st.error(f"Failed to import local modules: {e}")
+    st.stop()
 
-import mediapipe as mp
-mp_mesh = mp.solutions.face_mesh
 
 def extract_embedding_registration(image):
     with mp_mesh.FaceMesh(
