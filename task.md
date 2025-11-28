@@ -6,4 +6,9 @@
 - [x] Configure ngrok authentication
     - [x] Create setup_ngrok.bat
     - [x] Update documentation
-- [ ] Final verification
+- [x] Train and improve face recognition
+    - [x] Create training script for images in ml_model/data
+    - [x] Update video processor to show "Person" instead of "Unknown"
+    - [x] Adjust recognition threshold
+    - [x] Test and verify recognition works
+- [/] Final verification

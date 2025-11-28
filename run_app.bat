@@ -1,20 +1,11 @@
 @echo off
 echo ===================================================
-echo Face Attendance System Launcher
+echo Starting Face Attendance System...
 echo ===================================================
 echo.
-echo Checking for Python 3.11 environment...
-
-if exist ".venv311\Scripts\python.exe" (
-    echo Found .venv311 environment.
-    echo Starting application...
-    ".venv311\Scripts\python.exe" -m streamlit run streamlit_app.py
-) else (
-    echo ERROR: .venv311 environment not found!
-    echo Please run setup_env.bat first or ensure you have Python 3.11 installed.
-    echo.
-    echo Current Python version (may be incompatible):
-    python --version
-)
-
-pause
+echo Starting Streamlit app...
+echo If the browser doesn't open automatically, go to: http://localhost:8501
+echo.
+echo Press Ctrl+C to stop the server.
+echo.
+".venv311\Scripts\python.exe" -m streamlit run streamlit_app.py

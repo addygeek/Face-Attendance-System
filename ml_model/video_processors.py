@@ -16,6 +16,9 @@ class AttendanceVideoProcessor(VideoTransformerBase):
         self.embeddings = load_embeddings()
         self.threshold = 0.5 # Adjusted threshold
         self.last_log_time = {}
+        
+        # Debug: Print loaded embeddings
+        print(f"[DEBUG] Loaded {len(self.embeddings)} embeddings: {list(self.embeddings.keys())}")
 
     def transform(self, frame):
         img = frame.to_ndarray(format="bgr24")
@@ -61,7 +64,7 @@ class AttendanceVideoProcessor(VideoTransformerBase):
                     emb = np.concatenate((raw, derived))
                     
                     # Identify
-                    best_name = "Unknown"
+                    best_name = "Person"  # Default to "Person" for any detected face
                     best_sim = -1
                     
                     if self.embeddings:
@@ -71,24 +74,27 @@ class AttendanceVideoProcessor(VideoTransformerBase):
                                 best_sim = sim
                                 best_name = name
                     
-                    color = (0, 0, 255)
-                    if best_sim >= self.threshold:
-                        color = (0, 255, 0)
+                    # Determine if recognized
+                    is_recognized = best_sim >= self.threshold
+                    
+                    if is_recognized:
+                        color = (0, 255, 0)  # Green for recognized
                         # Log attendance
                         now = datetime.now()
                         last_time = self.last_log_time.get(best_name)
                         if not last_time or (now - last_time).total_seconds() > 30:
                             self.last_log_time[best_name] = now
-                            print(f"LOGGING: {best_name} ({best_sim})")
+                            print(f"✓ RECOGNIZED: {best_name} (confidence: {best_sim:.3f})")
                             try:
                                 log_attendance(best_name, best_sim)
                             except Exception as e:
                                 print(f"Logging error: {e}")
-
                     else:
-                        best_name = "Unknown"
+                        color = (0, 165, 255)  # Orange for unrecognized
+                        best_name = "Person"  # Show "Person" for unrecognized faces
+                        print(f"ℹ DETECTED: Face detected (best match: {best_sim:.3f}, threshold: {self.threshold})")
 
-                    # Draw
+                    # Draw bounding box
                     h, w, c = img.shape
                     x_min, x_max = w, 0
                     y_min, y_max = h, 0
@@ -100,6 +106,13 @@ class AttendanceVideoProcessor(VideoTransformerBase):
                         if y > y_max: y_max = y
                     
                     cv2.rectangle(img, (x_min, y_min), (x_max, y_max), color, 2)
-                    cv2.putText(img, f"{best_name} {best_sim:.2f}", (x_min, y_min - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+                    
+                    # Display label with confidence
+                    if is_recognized:
+                        label = f"{best_name} ({best_sim:.2f})"
+                    else:
+                        label = "Person"
+                    
+                    cv2.putText(img, label, (x_min, y_min - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
 
         return av.VideoFrame.from_ndarray(img, format="bgr24")
