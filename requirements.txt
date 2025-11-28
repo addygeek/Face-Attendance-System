@@ -22,6 +22,7 @@ flask>=2.3.0
 streamlit>=1.30.0
 streamlit-webrtc>=0.47.0
 pandas>=2.0.0
+av>=10.0.0
 
 # CORS support - Required for cross-origin requests from browser
 flask-cors>=4.0.0
