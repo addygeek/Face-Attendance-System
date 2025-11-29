@@ -1,38 +1,32 @@
 # ============================================================================
-# Face Attendance System - Complete Requirements
+# Face Attendance System - Streamlit Cloud Compatible
 # Python 3.11+ Compatible
-# For easy deployment on Windows, Mac, and Linux
+# Optimized for Streamlit Cloud deployment
 # ============================================================================
 
-# ============================================================================
-# CORE DEPENDENCIES
-# ============================================================================
+# Core numerical computing
+numpy>=1.24.0,<2.0.0
 
-# Numerical computing - Required for embeddings and calculations
-numpy>=1.23.0,<2.0.0
+# Image processing - HEADLESS version is critical for Streamlit Cloud
+opencv-python-headless==4.8.1.78
 
-# Image processing - Required for face detection and image handling
-# Use headless version for Streamlit Cloud deployment to avoid libGL errors
-opencv-python-headless>=4.8.0
+# MediaPipe - Face detection and landmarks (pin version for stability)
+mediapipe==0.10.9
 
-# Web framework - Required for REST API
-flask>=2.3.0
-
-# Streamlit - Required for the new UI
+# Streamlit framework
 streamlit>=1.30.0
-streamlit-webrtc>=0.47.0
-pandas>=2.0.0
-av>=10.0.0
 
-# CORS support - Required for cross-origin requests from browser
+# Data handling
+pandas>=2.0.0
+
+# Web framework for REST API
+flask>=2.3.0
 flask-cors>=4.0.0
 
-# Secure Tunneling - Required for mobile access (HTTPS)
+# WebRTC support - using specific compatible versions
+streamlit-webrtc==0.47.1
+av==11.0.0
+aiortc>=1.5.0
+
+# Secure tunneling (optional - for local mobile access)
 pyngrok>=7.0.0
-
-# ============================================================================
-# FACE DETECTION & RECOGNITION
-# ============================================================================
-
-# MediaPipe - Face detection and landmark extraction
-mediapipe>=0.10.0
