@@ -35,7 +35,6 @@ wheels/
 .env.local
 
 # IDEs
-.vscode/
 .idea/
 *.swp
 *.swo
